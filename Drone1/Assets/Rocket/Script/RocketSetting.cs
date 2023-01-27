@@ -24,6 +24,8 @@ public class RocketSetting : MonoBehaviour
     private Rigidbody Mass1_Rigidbody;
     private Rigidbody Mass2_Rigidbody;
 
+    Vector3 mass1InitPos;
+    Vector3 mass2InitPos;
 
     void Start()
     {
@@ -48,6 +50,10 @@ public class RocketSetting : MonoBehaviour
     {
         RocketAgent_Rigidbody.velocity = Vector3.zero;
         RocketAgent_Rigidbody.angularVelocity = Vector3.zero;
+        Mass1_Rigidbody.velocity = Vector3.zero;
+        Mass1_Rigidbody.angularVelocity = Vector3.zero;
+        Mass2_Rigidbody.velocity = Vector3.zero;
+        Mass2_Rigidbody.angularVelocity = Vector3.zero;
 
         RocketTrans.position = rocketInitPos;
         RocketTrans.rotation = rocketInitRot;
@@ -55,5 +61,14 @@ public class RocketSetting : MonoBehaviour
         GoalTrans.position = areaInitPos + new Vector3(Random.Range(-20f, 20f), 0, Random.Range(-20f, 20f));
         Mass1Trans.position = areaInitPos + new Vector3(Random.Range(-10f, 10f), 0, Random.Range(-10f, 10f));
         Mass2Trans.position = areaInitPos + new Vector3(Random.Range(-10f, 10f), 0, Random.Range(-10f, 10f));
+
+        mass1InitPos = Mass1Trans.position;
+        mass2InitPos = Mass2Trans.position;
+    }
+
+    void Update()
+    {
+        Mass1Trans.position = mass1InitPos;
+        Mass2Trans.position = mass2InitPos;
     }
 }

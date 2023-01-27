@@ -25,6 +25,8 @@ public class RocketAgent : Agent
     private Rigidbody mass1_Rigidbody;
     private Rigidbody mass2_Rigidbody;
 
+    private Collision collision;
+
     public override void Initialize()
     {
         dcoScript = gameObject.GetComponent<PA_DroneController>();
@@ -39,6 +41,8 @@ public class RocketAgent : Agent
         mass2_Rigidbody = mass2.GetComponent<Rigidbody>();
 
         Academy.Instance.AgentPreStep += WaitTimeInference;
+
+        collision = gameObject.GetComponent<Collision>();
     }
 
     public override void CollectObservations(VectorSensor sensor)
@@ -48,22 +52,6 @@ public class RocketAgent : Agent
         sensor.AddObservation(agent_Rigidbody.velocity);
 
         sensor.AddObservation(agent_Rigidbody.angularVelocity);
-    }
-
-    bool isCollided = false;
-
-    void OnCollisionEnter(Collision collision)
-    {
-        if(collision.gameObject.name == "Mass1")
-        {
-            isCollided = true;
-            Debug.Log("Mass1");
-        }
-        else if(collision.gameObject.name == "Mass2")
-        {
-            isCollided = true;
-            Debug.Log("Mass2");
-        }
     }
 
     public override void OnActionReceived(ActionBuffers actionBuffers)
@@ -92,7 +80,12 @@ public class RocketAgent : Agent
             SetReward(1f);
             EndEpisode();
         }
-        else if(goaldistance > 30f | isCollided)
+        else if(goaldistance > 30f)
+        {
+            SetReward(-1f);
+            EndEpisode();
+        }
+        else if(collision.isCollided)
         {
             SetReward(-1f);
             EndEpisode();
